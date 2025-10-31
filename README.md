@@ -110,6 +110,9 @@ docker run -p 5000:80 weather-api:latest
 4. 主页 Packages 授权（对于已经手动长传成功过Package的）
 	- 连接项目仓库
 	- Package settings > Manage Actions access > add repository👉设为 Write（或Admin更保险）
+5. 触发限制在某个目录（Server）下
+	- push下添加paths
+	- pull_request下也添加paths：因为不是拉取整个项目，而是 只拉取变更的文件（增量）！如果拉取了 CLient 是不触发的
 
 ### 操作
 
