@@ -104,9 +104,12 @@ docker run -p 5000:80 weather-api:latest
 2. Dockerfile如果不在git仓库根目录，需要GitHub Actions的配置指定 
 	- name: Build and push 中
 		- 找 context: ./Server/WebAPI/WebAPI     # Dockerfile 所在目录（相对根目录）
-3. 仓库 Actions 默认只有Read权限
+3. 仓库 Actions 授权
 	- Registry / Settings / Actions / General
 		- Workflow permissions：选 Read and write permissions（默认是 Read-only）。
+4. 主页 Packages 授权（对于已经手动长传成功过Package的）
+	- 连接项目仓库
+	- Package settings > Manage Actions access > add repository
 
 ### 操作
 
