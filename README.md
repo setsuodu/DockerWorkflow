@@ -109,7 +109,7 @@ docker run -p 5000:80 weather-api:latest
 		- Workflow permissions：选 Read and write permissions（默认是 Read-only）。
 4. 主页 Packages 授权（对于已经手动长传成功过Package的）
 	- 连接项目仓库
-	- Package settings > Manage Actions access > add repository
+	- Package settings > Manage Actions access > add repository👉设为 Write（或Admin更保险）
 
 ### 操作
 
