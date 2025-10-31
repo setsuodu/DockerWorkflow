@@ -99,6 +99,12 @@ docker run -p 5000:80 weather-api:latest
 | 打 tag git tag v1.0.0 | v1.0.0 | 是 | ghcr.io/you/myapp:v1.0.0 |
 | 所有推送 | sha-abc123... | 是 | ghcr.io/you/myapp:sha-abc1234567 |
 
+### 问题
+1. .github/workflows/docker-build-push.yml 在根目录找到文件夹.github 
+2. Dockerfile如果不在git仓库根目录，需要GitHub Actions的配置指定 
+	- name: Build and push 中
+		- 找 context: ./Server/WebAPI/WebAPI     # Dockerfile 所在目录（相对根目录）
+
 ### 操作
 
 1. 基于上面Github 手动操作成功，检查 Dockerfile。

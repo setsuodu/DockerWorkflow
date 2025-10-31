@@ -52,7 +52,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./Server/WebAPI/WebAPI     # Dockerfile 所在目录（相对根目录）
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ steps.image.outputs.name }}:latest
