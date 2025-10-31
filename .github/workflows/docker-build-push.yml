@@ -21,7 +21,15 @@ jobs:
         with:
           fetch-depth: 0   # 必须！否则 git 命令无法获取 tag
 
-      # 2. 设置版本号（自动生成）
+      # 2. 自定义镜像名（你自己定义）
+      - name: Set custom image name
+        id: image
+        run: |
+          # 自定义镜像名（小写 + 连字符）
+          CUSTOM_NAME="weather-api"  # 改成你想要的名字！
+          echo "name=$CUSTOM_NAME" >> $GITHUB_OUTPUT
+
+      # 3. 设置版本号（自动生成）
       - name: Generate version tags
         id: version
         run: |
@@ -35,7 +43,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "LATEST=latest" >> $GITHUB_OUTPUT
 
-      # 3. 登录 GHCR
+      # 4. 登录 GHCR
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
@@ -43,17 +51,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}  # 内置 token，自动有权限
 
-      # 4. 构建并推送镜像（带多个标签）
+      # 5. 构建并推送镜像（带多个标签）
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.VERSION }}
-            ghcr.io/${{ github.repository }}:sha-${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.image.outputs.name }}:latest
+            ghcr.io/${{ github.repository_owner }}/${{ steps.image.outputs.name }}:${{ steps.version.outputs.tag }}
+            ghcr.io/${{ github.repository_owner }}/${{ steps.image.outputs.name }}:sha-${{ github.sha }}
           labels: |
-            org.opencontainers.image.version=${{ steps.version.outputs.VERSION }}
+            org.opencontainers.image.version=${{ steps.version.outputs.tag }}
             org.opencontainers.image.created=${{ steps.version.outputs.BUILD_DATE }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
