@@ -125,7 +125,9 @@ git commit -m "Add auto Docker build & push"
 git push origin main
 ```
 → 去 GitHub → Actions 标签 → 看到工作流运行
+5. 如何打正式版本 tag？（推荐）
 ```
 git tag v1.0.0
 git push origin v1.0.0
 ```
+→ 自动触发构建，镜像标签为 v1.0.0
