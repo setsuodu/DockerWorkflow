@@ -103,7 +103,7 @@ docker run -p 5000:80 weather-api:latest
 
 1. 基于上面Github 手动操作成功，检查 Dockerfile。
 2. 创建 GitHub Actions 工作流
-	- 仓库根目录创建 .githubworkflowsdocker-build-push.yml
+	- 仓库根目录创建 .github/workflows/docker-build-push.yml（👈注意前两个是文件夹）
 	- 有这个yml，不用再去项目的Actions标签下手动设置，触发构建就会有
 3. 提交并触发构建
 ```
