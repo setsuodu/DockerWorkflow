@@ -1,0 +1,59 @@
+name: Build & Push Docker Image
+
+on:
+  push:
+    branches: [ main ]  # 每次 push 到 main 分支 → 自动构建 Docker 镜像
+    tags: [ 'v*.*.*' ]  # 推送 tag 如 v1.0.0 时也触发
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write    # 必须有这个权限才能推送到 GHCR
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 必须！否则 git 命令无法获取 tag
+
+      # 2. 设置版本号（自动生成）
+      - name: Generate version tags
+        id: version
+        run: |
+          # 如果是 tag 推送（如 v1.2.3），用 tag 名
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            # 否则用日期 + commit 短哈希
+            VERSION=$(date +'%Y%m%d')-${GITHUB_SHA::8}
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "LATEST=latest" >> $GITHUB_OUTPUT
+
+      # 3. 登录 GHCR
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}  # 内置 token，自动有权限
+
+      # 4. 构建并推送镜像（带多个标签）
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.VERSION }}
+            ghcr.io/${{ github.repository }}:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.version=${{ steps.version.outputs.VERSION }}
+            org.opencontainers.image.created=${{ steps.version.outputs.BUILD_DATE }}
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
