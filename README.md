@@ -104,14 +104,18 @@ docker run -p 5000:80 weather-api:latest
 2. Dockerfile如果不在git仓库根目录，需要GitHub Actions的配置指定 
 	- name: Build and push 中
 		- 找 context: ./Server/WebAPI/WebAPI     # Dockerfile 所在目录（相对根目录）
+3. 仓库 Actions 默认只有Read权限
+	- Registry / Settings / Actions / General
+		- Workflow permissions：选 Read and write permissions（默认是 Read-only）。
 
 ### 操作
 
 1. 基于上面Github 手动操作成功，检查 Dockerfile。
-2. 创建 GitHub Actions 工作流
+2. 设置仓库Actions权限。
+3. 创建 GitHub Actions 工作流
 	- 仓库根目录创建 .github/workflows/docker-build-push.yml（👈注意前两个是文件夹）
 	- 有这个yml，不用再去项目的Actions标签下手动设置，触发构建就会有
-3. 提交并触发构建
+4. 提交并触发构建
 ```
 git add .github/workflows/docker-build-push.yml
 git commit -m "Add auto Docker build & push"
