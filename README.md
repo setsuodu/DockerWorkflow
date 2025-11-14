@@ -7,6 +7,7 @@ step by step show unity develop integrate docker workflow
 - 在任意一台新主机上，用一个docker-compose文件，即可启动服务器。
 - CI/CD，服务器开发过程中，提交即触发构建。
 - 记录 dockerhub/github 整个使用流程。 另外还有 gitlab/Harbor/云仓库..使用到再说。
+- 另外说明Jenkins已基本淘汰，只适合svn等非git项目。github/gitlab已具备完整功能。
 
 # 项目准备
 
@@ -64,12 +65,12 @@ login Succeeded
 ```
 3. 构建并标签镜像：
 ```
-docker build -t ghcr.io/your-username/your-vs-project:latest .
+## docker build -t ghcr.io/your-username/your-vs-project:latest .
 docker build -t ghcr.io/setsuodu/weather-api:latest .
 ```
 4. 推送：(200M+，主要是dotnet环境)
 ```
-docker push ghcr.io/your-username/your-vs-project:latest
+## docker push ghcr.io/your-username/your-vs-project:latest
 docker push ghcr.io/setsuodu/weather-api:latest
 ```
 5. 镜像将出现在仓库的 Packages 标签下。
